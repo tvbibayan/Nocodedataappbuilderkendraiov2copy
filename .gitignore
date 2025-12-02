@@ -1,0 +1,11 @@
+node_modules/
+.next/
+dist/
+build/
+.vite/
+.DS_Store
+.env
+.env.*
+*.log
+.idea/
+.vscode/
