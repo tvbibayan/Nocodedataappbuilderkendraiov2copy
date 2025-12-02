@@ -9,15 +9,16 @@ export interface StatsCardProps {
 
 export function StatsCard({ label, value, change, color }: StatsCardProps) {
   const colorClasses = {
-    cyan: 'from-cyan-500/20 to-cyan-600/20 border-cyan-500/30 text-cyan-400',
-    emerald: 'from-emerald-500/20 to-emerald-600/20 border-emerald-500/30 text-emerald-400',
-    violet: 'from-violet-500/20 to-violet-600/20 border-violet-500/30 text-violet-400',
+    cyan: "from-cyan-500/20 to-cyan-600/20 border-cyan-500/30 text-cyan-400",
+    emerald:
+      "from-emerald-500/20 to-emerald-600/20 border-emerald-500/30 text-emerald-400",
+    violet: "from-violet-500/20 to-violet-600/20 border-violet-500/30 text-violet-400",
   };
 
   const textColorClasses = {
-    cyan: 'text-cyan-400',
-    emerald: 'text-emerald-400',
-    violet: 'text-violet-400',
+    cyan: "text-cyan-400",
+    emerald: "text-emerald-400",
+    violet: "text-violet-400",
   };
 
   return (

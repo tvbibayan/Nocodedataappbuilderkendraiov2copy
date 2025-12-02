@@ -8,9 +8,7 @@ import {
   type DashboardComponentType,
   type DashboardRole,
 } from "../config/dashboard";
-import {
-  mockDashboardDataSource,
-} from "../data/mock-dashboard-data-source";
+import { mockDashboardDataSource } from "../data/mock-dashboard-data-source";
 import type { DashboardData } from "../data/dashboard-data-source";
 
 interface DashboardProps {
@@ -47,7 +45,6 @@ function isVisible(item: { visibleTo?: DashboardRole[] }, role: DashboardRole) {
 export function Dashboard({ onNavigateToFlows, initialRole }: DashboardProps) {
   const { header, stats, sections } = defaultDashboardSchema;
   const [data, setData] = React.useState<DashboardData | null>(null);
-  const [loading, setLoading] = React.useState(true);
   const [role, setRole] = React.useState<DashboardRole>(
     initialRole ?? defaultDashboardSchema.defaultRole,
   );
@@ -59,12 +56,11 @@ export function Dashboard({ onNavigateToFlows, initialRole }: DashboardProps) {
       .then((result) => {
         if (isMounted) {
           setData(result);
-          setLoading(false);
         }
       })
       .catch(() => {
         if (isMounted) {
-          setLoading(false);
+          // handle errors later
         }
       });
 
