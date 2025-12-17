@@ -46,7 +46,7 @@ export function CanvasBlockComponent({
           return <Component {...(block.props || {})} />;
         }
         return (
-          <div className="flex items-center justify-center h-full text-slate-500 text-sm">
+          <div className="flex items-center justify-center h-full text-cyan-200 text-sm">
             Unknown component: {block.componentType}
           </div>
         );
@@ -54,10 +54,10 @@ export function CanvasBlockComponent({
       case "stat":
         return (
           <div className="p-4 h-full flex flex-col justify-center">
-            <div className="text-slate-400 text-sm mb-1">
+            <div className="text-cyan-300 text-sm mb-1">
               {(block.props?.label as string) || "Stat"}
             </div>
-            <div className="text-2xl font-bold text-slate-100">
+            <div className="text-2xl font-bold text-white">
               {(block.props?.value as string) || "—"}
             </div>
             {block.props?.change ? (
@@ -89,12 +89,12 @@ export function CanvasBlockComponent({
         );
       case "container":
         return (
-          <div className="p-4 text-slate-500 text-sm h-full flex items-center justify-center border-2 border-dashed border-slate-700 rounded-lg m-2">
+          <div className="p-4 text-cyan-200 text-sm h-full flex items-center justify-center border-2 border-dashed border-cyan-500/30 rounded-lg m-2">
             Drop blocks here
           </div>
         );
       default:
-        return <div className="text-slate-500 p-4">Unknown block type</div>;
+        return <div className="text-cyan-200 p-4">Unknown block type</div>;
     }
   };
 
@@ -139,7 +139,7 @@ export function CanvasBlockComponent({
     <>
       <div
         className={cn(
-          "canvas-block h-full rounded-xl border-l-4 border border-slate-600 bg-slate-800 relative overflow-hidden",
+          "canvas-block h-full rounded-xl border-l-4 border border-cyan-500/20 bg-[#1a1b2e] relative overflow-hidden",
           shadowClass,
           accentClasses[accentColor] || "border-l-cyan-500",
           block.isLocked && "opacity-80",
@@ -153,23 +153,23 @@ export function CanvasBlockComponent({
         {/* Block toolbar - inside the block at top */}
         {editable && isHovered && (
           <div
-            className="absolute top-0 left-0 right-0 flex items-center gap-1 px-3 py-2 bg-slate-900 border-b border-slate-700 z-[1000]"
+            className="absolute top-0 left-0 right-0 flex items-center gap-1 px-3 py-2 bg-[#0f0f23] border-b border-cyan-500/30 z-[1000] shadow-lg"
             style={{ pointerEvents: 'auto' }}
           >
             {/* Drag handle */}
-            <div className="block-drag-handle cursor-grab active:cursor-grabbing p-1.5 hover:bg-slate-700 rounded">
-              <GripVertical className="w-4 h-4 text-slate-400" />
+            <div className="block-drag-handle cursor-grab active:cursor-grabbing p-1.5 hover:bg-[#2d2e47] rounded">
+              <GripVertical className="w-4 h-4 text-cyan-400" />
             </div>
 
             {/* Block title */}
-            <span className="flex-1 text-sm text-slate-300 font-medium truncate px-2">
+            <span className="flex-1 text-sm text-white font-medium truncate px-2">
               {block.title || block.componentType || block.type}
             </span>
 
             {/* Toolbar buttons - larger and more visible */}
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsSettingsOpen(true); }}
-              className="p-1.5 text-cyan-400 hover:text-cyan-300 hover:bg-slate-700 rounded transition-colors"
+              className="p-1.5 text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/20 rounded transition-colors"
               title="Block Settings"
               type="button"
             >
@@ -177,7 +177,7 @@ export function CanvasBlockComponent({
             </button>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); duplicateBlock(block.id); }}
-              className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded transition-colors"
+              className="p-1.5 text-cyan-300 hover:text-white hover:bg-cyan-500/20 rounded transition-colors"
               title="Duplicate"
               type="button"
             >
@@ -185,7 +185,7 @@ export function CanvasBlockComponent({
             </button>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsExpanded(!isExpanded); }}
-              className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded transition-colors"
+              className="p-1.5 text-cyan-300 hover:text-white hover:bg-cyan-500/20 rounded transition-colors"
               title={isExpanded ? "Collapse" : "Expand"}
               type="button"
             >
@@ -204,7 +204,7 @@ export function CanvasBlockComponent({
             </button>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleBlockMinimized(block.id); }}
-              className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded transition-colors"
+              className="p-1.5 text-cyan-300 hover:text-white hover:bg-cyan-500/20 rounded transition-colors"
               title="Minimize"
               type="button"
             >
@@ -212,7 +212,7 @@ export function CanvasBlockComponent({
             </button>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeBlock(block.id); }}
-              className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-700 rounded transition-colors"
+              className="p-1.5 text-cyan-300 hover:text-red-400 hover:bg-red-500/20 rounded transition-colors"
               title="Delete"
               type="button"
             >

@@ -78,12 +78,12 @@ export function CanvasDashboard({ onNavigateToFlows, initialRole = "viewer" }: C
   }
 
   return (
-    <div className="h-full bg-slate-950 flex flex-col">
+    <div className="h-full bg-[#0f0f23] flex flex-col">
       {/* Header */}
-      <header className="bg-slate-900 border-b border-slate-800 px-6 py-4">
+      <header className="bg-[#1a1b2e] border-b border-cyan-500/20 px-6 py-4 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <h1 className="text-xl font-semibold text-slate-100">
+            <h1 className="text-xl font-semibold text-white">
               {workspace?.name || "Canvas Dashboard"}
             </h1>
             <WorkspaceSwitcher />
@@ -94,7 +94,7 @@ export function CanvasDashboard({ onNavigateToFlows, initialRole = "viewer" }: C
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as DashboardRole)}
-              className="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+              className="bg-[#1e2039] border border-cyan-500/30 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400"
             >
               <option value="viewer">Viewer</option>
               <option value="analyst">Analyst</option>
@@ -104,17 +104,17 @@ export function CanvasDashboard({ onNavigateToFlows, initialRole = "viewer" }: C
             {/* Command palette trigger */}
             <button
               onClick={() => setIsCommandPaletteOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-sm text-slate-400 transition-colors"
+              className="flex items-center gap-2 px-3 py-2 bg-[#1e2039] hover:bg-[#2d2e47] border border-cyan-500/30 rounded-lg text-sm text-cyan-100 transition-colors"
             >
               <Command className="w-4 h-4" />
               <span className="hidden sm:inline">Search...</span>
-              <kbd className="hidden sm:inline px-1.5 py-0.5 text-xs bg-slate-700 rounded">⌘K</kbd>
+              <kbd className="hidden sm:inline px-1.5 py-0.5 text-xs bg-[#2d2e47] rounded border border-cyan-500/20">⌘K</kbd>
             </button>
 
             {/* Add block button */}
             <button
               onClick={() => setIsBlockPaletteOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg text-sm text-white transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-400 rounded-lg text-sm text-white font-medium shadow-lg shadow-cyan-500/30 transition-all hover:shadow-cyan-500/50"
             >
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">Add Block</span>
@@ -123,15 +123,15 @@ export function CanvasDashboard({ onNavigateToFlows, initialRole = "viewer" }: C
             {/* Theme studio trigger */}
             <button
               onClick={() => setIsThemeStudioOpen(true)}
-              className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-violet-400 transition-colors"
+              className="p-2 bg-[#1e2039] hover:bg-[#2d2e47] border border-cyan-500/30 rounded-lg text-cyan-300 hover:text-violet-400 transition-colors"
               title="Theme Studio"
             >
               <Palette className="w-5 h-5" />
             </button>
 
             {/* Notifications */}
-            <button className="relative p-2 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors">
-              <Bell className="w-5 h-5 text-slate-400" />
+            <button className="relative p-2 bg-[#1e2039] hover:bg-[#2d2e47] border border-cyan-500/30 rounded-lg transition-colors">
+              <Bell className="w-5 h-5 text-cyan-300" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-cyan-500 rounded-full" />
             </button>
           </div>
@@ -139,7 +139,7 @@ export function CanvasDashboard({ onNavigateToFlows, initialRole = "viewer" }: C
       </header>
 
       {/* Canvas */}
-      <div className="flex-1 overflow-auto p-6">
+      <div className="flex-1 overflow-auto p-6" style={{ background: 'linear-gradient(to bottom, #0f0f23 0%, #16172b 100%)' }}>
         <LivingCanvas
           componentRegistry={enhancedRegistry}
           editable={true}

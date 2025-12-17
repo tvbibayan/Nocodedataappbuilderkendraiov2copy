@@ -34,9 +34,13 @@ import {
   ToggleLeft,
   ToggleRight,
   Layers,
+  FileUp,
+  HardDrive,
 } from 'lucide-react';
 import { toast, Toaster } from 'sonner';
 import { CanvasDashboard } from './components/CanvasDashboard';
+import { FileUploader } from './components/FileUploader';
+import { DatabaseConnector } from './components/DatabaseConnector';
 
 // Types
 type View = 'dashboard' | 'flow-builder' | 'settings';
@@ -68,23 +72,23 @@ interface Flow {
   nodes: number;
 }
 
-// Warm Palette Color Constants
+// Modern Cyan Palette Color Constants
 const COLORS = {
-  background: '#3a3238',      // Warm Charcoal - Main canvas
-  surface: '#3c1627',         // Deep Plum - Sidebars, Cards, Modals
-  primary: '#8b3b2d',         // Rust Red - CTA buttons, Active states
-  secondary: '#6d222d',       // Deep Maroon - Hover states, secondary headers
-  highlight: '#c19aa9',       // Muted Rose - Borders, Icons, Selected text
-  text: '#FFF5F7',            // Warm Off-White - Main text
-  textMuted: '#c19aa9',       // Muted Rose - Subtitles, metadata
+  background: '#0f0f23',      // Deep Navy - Main canvas
+  surface: '#1a1b2e',         // Dark Slate - Sidebars, Cards, Modals
+  primary: '#06b6d4',         // Vibrant Cyan - CTA buttons, Active states
+  secondary: '#164e63',       // Dark Cyan - Hover states, secondary headers
+  highlight: '#67e8f9',       // Light Cyan - Borders, Icons, Selected text
+  text: '#e8e9f3',            // Soft White - Main text
+  textMuted: '#8b92b2',       // Muted Purple-Gray - Subtitles, metadata
 };
 
-// Initial Nodes and Connections with Warm Palette
+// Initial Nodes and Connections with Modern Cyan Palette
 const initialNodes: Node[] = [
-  { id: 'node-1', type: 'trigger', label: 'Data Source', x: 100, y: 200, inputs: 0, outputs: 1, icon: Database, color: '#8b3b2d' },
-  { id: 'node-2', type: 'process', label: 'Transform', x: 350, y: 150, inputs: 1, outputs: 2, icon: Zap, color: '#6d222d' },
-  { id: 'node-3', type: 'api', label: 'API Call', x: 350, y: 280, inputs: 1, outputs: 1, icon: Activity, color: '#c19aa9' },
-  { id: 'node-4', type: 'output', label: 'Save Output', x: 600, y: 200, inputs: 2, outputs: 0, icon: TrendingUp, color: '#8b3b2d' },
+  { id: 'node-1', type: 'trigger', label: 'Data Source', x: 100, y: 200, inputs: 0, outputs: 1, icon: Database, color: '#06b6d4' },
+  { id: 'node-2', type: 'process', label: 'Transform', x: 350, y: 150, inputs: 1, outputs: 2, icon: Zap, color: '#8b5cf6' },
+  { id: 'node-3', type: 'api', label: 'API Call', x: 350, y: 280, inputs: 1, outputs: 1, icon: Activity, color: '#10b981' },
+  { id: 'node-4', type: 'output', label: 'Save Output', x: 600, y: 200, inputs: 2, outputs: 0, icon: TrendingUp, color: '#f59e0b' },
 ];
 
 const initialConnections: Connection[] = [
@@ -239,14 +243,14 @@ export default function App() {
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: COLORS.background, color: COLORS.text }}>
       <Toaster position="top-right" theme="dark" richColors />
       
-      {/* Sidebar - Warm Glassmorphism */}
-      <aside className="w-64 flex flex-col" style={{ backgroundColor: `${COLORS.surface}e6`, borderRight: `1px solid ${COLORS.highlight}33`, backdropFilter: 'blur(12px)' }}>
-        <div className="p-5" style={{ borderBottom: `1px solid ${COLORS.highlight}33` }}>
+      {/* Sidebar - Modern Glassmorphism */}
+      <aside className="w-72 flex flex-col" style={{ backgroundColor: `${COLORS.surface}e6`, borderRight: `1px solid ${COLORS.highlight}33`, backdropFilter: 'blur(12px)' }}>
+        <div className="p-6" style={{ borderBottom: `1px solid ${COLORS.highlight}33` }}>
           <h1 className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: COLORS.primary, boxShadow: `0 4px 20px ${COLORS.primary}40` }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: COLORS.primary, boxShadow: `0 4px 20px ${COLORS.primary}40` }}>
               <Zap className="w-5 h-5" style={{ color: COLORS.text }} />
             </div>
-            <span className="font-bold text-lg tracking-tight" style={{ color: COLORS.text }}>Kendraio</span>
+            <span className="font-bold text-xl tracking-tight" style={{ color: COLORS.text }}>Kendraio</span>
           </h1>
         </div>
 
@@ -363,14 +367,14 @@ export default function App() {
   );
 }
 
-// Navigation Button Component - Warm Vintage Style
+// Navigation Button Component - Modern Cyan Style
 function NavButton({ icon: Icon, label, active, onClick }: any) {
   return (
     <motion.button
       onClick={onClick}
       whileHover={{ x: 4 }}
       whileTap={{ scale: 0.98 }}
-      className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all"
+      className="w-full flex items-center gap-3 px-5 py-3 rounded-xl text-sm transition-all"
       style={{
         backgroundColor: active ? `${COLORS.primary}33` : 'transparent',
         color: active ? COLORS.text : COLORS.textMuted,
@@ -391,7 +395,7 @@ function NavButton({ icon: Icon, label, active, onClick }: any) {
   );
 }
 
-// Dashboard Component - Warm Vintage Bento Layout
+// Dashboard Component - Modern Cyan Bento Layout
 function Dashboard({
   flows,
   selectedStat,
@@ -406,7 +410,7 @@ function Dashboard({
   canvasMode,
   onToggleCanvasMode,
 }: any) {
-  // Warm Palette Stats
+  // Modern Cyan Palette Stats
   const stats = [
     { id: 'flows', label: 'Active Flows', value: String(flows.filter((f: Flow) => f.status === 'running').length), change: '+12%', icon: Workflow, description: 'Running pipelines' },
     { id: 'data', label: 'Data Processed', value: '1.2M', change: '+8%', icon: Database, description: 'Records transformed' },
@@ -550,7 +554,7 @@ function Dashboard({
   );
 }
 
-// Bento Stat Card - Warm Vintage Style
+// Bento Stat Card - Modern Cyan Style
 function BentoStatCard({ label, value, change, icon: Icon, description, isSelected }: any) {
   const isPositive = change.startsWith('+');
 
@@ -604,7 +608,7 @@ function BentoStatCard({ label, value, change, icon: Icon, description, isSelect
   );
 }
 
-// Activity Card - Warm Glassmorphism Style
+// Activity Card - Modern Glassmorphism Style
 function ActivityCard({ flows, onRunFlow, onStopFlow, onDeleteFlow, onDuplicateFlow }: any) {
   const [expandedFlow, setExpandedFlow] = useState<string | null>(null);
 
@@ -718,7 +722,7 @@ function ActivityCard({ flows, onRunFlow, onStopFlow, onDeleteFlow, onDuplicateF
   );
 }
 
-// Quick Actions Card - Warm Vintage Style
+// Quick Actions Card - Modern Cyan Style
 function QuickActionsCard({ onCreateFlow, onRunAllFlows, onExportData }: any) {
   const actions = [
     { label: 'New Flow', icon: Plus, action: onCreateFlow, description: 'Create pipeline' },
@@ -761,7 +765,7 @@ function QuickActionsCard({ onCreateFlow, onRunAllFlows, onExportData }: any) {
   );
 }
 
-// Flow Builder Component - Warm Vintage Theme
+// Flow Builder Component - Modern Cyan Theme
 function FlowBuilder({
   nodes,
   connections,
@@ -786,7 +790,7 @@ function FlowBuilder({
     >
       {/* Canvas Area */}
       <div className="flex-1 relative overflow-hidden">
-        {/* Warm Grid Background */}
+        {/* Modern Grid Background */}
         <div className="absolute inset-0" style={{ backgroundColor: COLORS.background }}>
           <div
             className="absolute inset-0"
@@ -820,13 +824,13 @@ function FlowBuilder({
               height: '100%',
             }}
           >
-            {/* SVG Connections - Warm Gradient Bezier */}
+            {/* SVG Connections - Modern Cyan Gradient Bezier */}
             <svg className="absolute inset-0 w-full h-full pointer-events-none">
               <defs>
                 <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#8b3b2d" stopOpacity="0.6" />
-                  <stop offset="50%" stopColor="#c19aa9" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#6d222d" stopOpacity="0.6" />
+                  <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.6" />
+                  <stop offset="50%" stopColor="#67e8f9" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#0e7490" stopOpacity="0.6" />
                 </linearGradient>
                 <filter id="glow">
                   <feGaussianBlur stdDeviation="2" result="coloredBlur" />
@@ -869,7 +873,7 @@ function FlowBuilder({
           </div>
         </div>
 
-        {/* Floating Toolbar - Warm Glassmorphism */}
+        {/* Floating Toolbar - Modern Glassmorphism */}
         <div 
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-1.5 p-2 rounded-2xl shadow-2xl"
           style={{ backgroundColor: `${COLORS.surface}e6`, backdropFilter: 'blur(12px)', border: `1px solid ${COLORS.highlight}33` }}
@@ -885,7 +889,7 @@ function FlowBuilder({
         </div>
       </div>
 
-      {/* Configuration Panel - Warm Glassmorphism */}
+      {/* Configuration Panel - Modern Glassmorphism */}
       <div 
         className="w-80 p-6 overflow-auto"
         style={{ backgroundColor: `${COLORS.surface}e6`, backdropFilter: 'blur(12px)', borderLeft: `1px solid ${COLORS.highlight}33` }}
@@ -970,7 +974,7 @@ function FlowBuilder({
   );
 }
 
-// Flow Node Component - Warm Vintage Style
+// Flow Node Component - Modern Cyan Style
 function FlowNode({ node, index, isSelected, onMouseDown }: any) {
   const Icon = node.icon;
 
@@ -993,7 +997,7 @@ function FlowNode({ node, index, isSelected, onMouseDown }: any) {
           boxShadow: isSelected ? `0 0 20px ${COLORS.highlight}30` : 'none',
         }}
       >
-        {/* Rust Red Header */}
+        {/* Cyan Header */}
         <div 
           className="px-4 py-3"
           style={{ backgroundColor: COLORS.primary }}
@@ -1042,7 +1046,7 @@ function FlowNode({ node, index, isSelected, onMouseDown }: any) {
   );
 }
 
-// Toolbar Button - Warm Vintage Style
+// Toolbar Button - Modern Cyan Style
 function ToolbarButton({ icon: Icon, onClick, label, semantic }: any) {
   return (
     <motion.button
@@ -1061,7 +1065,7 @@ function ToolbarButton({ icon: Icon, onClick, label, semantic }: any) {
   );
 }
 
-// Settings View Component - Warm Vintage Theme
+// Settings View Component - Modern Cyan Theme
 function SettingsView({
   notifications,
   setNotifications,
@@ -1080,6 +1084,8 @@ function SettingsView({
     { id: 'security', label: 'Security', icon: Shield },
     { id: 'appearance', label: 'Appearance', icon: Palette },
     { id: 'integrations', label: 'Integrations', icon: Code },
+    { id: 'files', label: 'Files', icon: FileUp },
+    { id: 'database', label: 'Database', icon: HardDrive },
     { id: 'notifications', label: 'Notifications', icon: Bell },
   ];
 
@@ -1301,12 +1307,12 @@ function SettingsView({
                   <SettingCard title="Accent Color" description="Customize your accent color" icon={Palette}>
                     <div className="grid grid-cols-6 gap-3">
                       {[
-                        { color: COLORS.primary, name: 'Rust Red' },
-                        { color: COLORS.secondary, name: 'Deep Maroon' },
-                        { color: COLORS.highlight, name: 'Muted Rose' },
-                        { color: '#8b3b2d', name: 'Rust' },
-                        { color: '#6d222d', name: 'Maroon' },
-                        { color: '#c19aa9', name: 'Rose' },
+                        { color: COLORS.primary, name: 'Vibrant Cyan' },
+                        { color: COLORS.secondary, name: 'Dark Cyan' },
+                        { color: COLORS.highlight, name: 'Light Cyan' },
+                        { color: '#8b5cf6', name: 'Purple' },
+                        { color: '#10b981', name: 'Green' },
+                        { color: '#f59e0b', name: 'Amber' },
                       ].map(({ color, name }) => (
                         <motion.button
                           key={color}
@@ -1375,6 +1381,38 @@ function SettingsView({
                 </motion.div>
               )}
 
+              {activeTab === 'files' && (
+                <motion.div
+                  key="files"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="space-y-4"
+                >
+                  <SettingCard title="File Upload" description="Upload and manage your files" icon={FileUp}>
+                    <FileUploader
+                      maxSize={50}
+                      multiple={true}
+                      onFilesUploaded={(files) => {
+                        console.log('Files uploaded:', files);
+                        toast.success(`${files.length} file(s) uploaded successfully!`);
+                      }}
+                    />
+                  </SettingCard>
+                </motion.div>
+              )}
+
+              {activeTab === 'database' && (
+                <motion.div
+                  key="database"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                >
+                  <DatabaseConnector />
+                </motion.div>
+              )}
+
               {activeTab === 'notifications' && (
                 <motion.div
                   key="notifications"
@@ -1417,7 +1455,7 @@ function SettingsView({
   );
 }
 
-// Setting Card Component - Warm Vintage Style
+// Setting Card Component - Modern Cyan Style
 function SettingCard({ title, description, icon: Icon, children }: any) {
   return (
     <motion.div 
@@ -1444,7 +1482,7 @@ function SettingCard({ title, description, icon: Icon, children }: any) {
   );
 }
 
-// Toggle Switch Component - Warm Vintage Style
+// Toggle Switch Component - Modern Cyan Style
 function ToggleSwitch({ enabled, onChange }: any) {
   return (
     <button

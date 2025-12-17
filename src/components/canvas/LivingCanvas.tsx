@@ -92,9 +92,9 @@ export function LivingCanvas({
 
   if (!canvasLayout) {
     return (
-      <div className="flex items-center justify-center h-full text-slate-400">
+      <div className="flex items-center justify-center h-full text-cyan-200">
         <div className="text-center">
-          <Sparkles className="w-12 h-12 mx-auto mb-4 text-slate-600" />
+          <Sparkles className="w-12 h-12 mx-auto mb-4 text-cyan-500/50" />
           <p>No workspace selected</p>
         </div>
       </div>
@@ -120,11 +120,11 @@ export function LivingCanvas({
         className={`relative h-full flex items-center justify-center ${className}`}
       >
         <div className="text-center max-w-md mx-auto p-8">
-          <Plus className="w-16 h-16 mx-auto mb-6 text-cyan-500/50" />
-          <h3 className="text-xl font-semibold text-slate-200 mb-2">
+          <Plus className="w-16 h-16 mx-auto mb-6 text-cyan-400" />
+          <h3 className="text-xl font-semibold text-white mb-2">
             Your canvas is empty
           </h3>
-          <p className="text-slate-400 mb-6">
+          <p className="text-cyan-200 mb-6">
             Click "Add Block" to start building your custom dashboard.
           </p>
         </div>

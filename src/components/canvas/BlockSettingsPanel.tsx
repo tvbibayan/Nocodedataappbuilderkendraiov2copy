@@ -81,26 +81,28 @@ export function BlockSettingsPanel({
             />
 
             {/* Panel */}
-            <div className="relative w-full max-w-md bg-slate-900/95 backdrop-blur-md border-l border-slate-700 shadow-2xl flex flex-col overflow-hidden">
+            <div className="relative w-full max-w-lg bg-[#0f0f23]/98 backdrop-blur-xl border-l-2 border-cyan-500/30 shadow-2xl flex flex-col overflow-hidden">
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-slate-700">
+                <div className="flex items-center justify-between px-6 py-5 border-b border-cyan-500/20 bg-gradient-to-r from-cyan-500/10 to-transparent">
                     <div className="flex items-center gap-3">
-                        <Settings className="w-5 h-5 text-cyan-400" />
+                        <div className="p-2 bg-cyan-500/20 rounded-lg">
+                            <Settings className="w-5 h-5 text-cyan-400" />
+                        </div>
                         <div>
-                            <h2 className="text-lg font-semibold text-slate-100">Block Settings</h2>
-                            <p className="text-xs text-slate-400">{block.title || block.type}</p>
+                            <h2 className="text-xl font-bold text-white">Block Settings</h2>
+                            <p className="text-sm text-cyan-300">{block.title || block.type}</p>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 text-slate-400 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition-colors"
+                        className="p-2 text-cyan-300 hover:text-white hover:bg-cyan-500/20 rounded-lg transition-all hover:rotate-90"
                     >
-                        <X className="w-5 h-5" />
+                        <X className="w-6 h-6" />
                     </button>
                 </div>
 
                 {/* Tabs */}
-                <div className="flex border-b border-slate-700">
+                <div className="flex border-b border-cyan-500/20 bg-[#16172b]">
                     {[
                         { id: "appearance" as TabId, label: "Appearance", icon: Palette },
                         { id: "layout" as TabId, label: "Layout", icon: Layout },
@@ -111,10 +113,10 @@ export function BlockSettingsPanel({
                             key={id}
                             onClick={() => setActiveTab(id)}
                             className={cn(
-                                "flex-1 flex items-center justify-center gap-2 px-3 py-3 text-sm transition-colors",
+                                "flex-1 flex items-center justify-center gap-2 px-4 py-4 text-sm font-medium transition-all",
                                 activeTab === id
-                                    ? "text-cyan-400 border-b-2 border-cyan-400 bg-slate-800/50"
-                                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                                    ? "text-white border-b-2 border-cyan-400 bg-cyan-500/10"
+                                    : "text-cyan-300 hover:text-white hover:bg-cyan-500/5"
                             )}
                         >
                             <Icon className="w-4 h-4" />
@@ -124,22 +126,22 @@ export function BlockSettingsPanel({
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto p-5 space-y-6">
+                <div className="flex-1 overflow-y-auto p-6 space-y-8">
                     {/* Appearance Tab */}
                     {activeTab === "appearance" && (
                         <>
                             {/* Accent Color */}
                             <SettingsSection title="Accent Color">
-                                <div className="grid grid-cols-6 gap-2">
+                                <div className="grid grid-cols-6 gap-3">
                                     {colorOptions.map((opt) => (
                                         <button
                                             key={opt.id}
                                             onClick={() => updateProps({ color: opt.id })}
                                             className={cn(
-                                                "w-10 h-10 rounded-lg border-2 transition-all",
+                                                "w-12 h-12 rounded-xl border-2 transition-all hover:scale-110",
                                                 currentColor === opt.id
-                                                    ? "border-white scale-110 shadow-lg"
-                                                    : "border-transparent hover:border-slate-500"
+                                                    ? "border-white scale-110 shadow-lg shadow-white/30 ring-2 ring-cyan-400/50"
+                                                    : "border-transparent hover:border-cyan-400/50"
                                             )}
                                             style={{ backgroundColor: opt.color }}
                                             title={opt.label}
@@ -150,20 +152,20 @@ export function BlockSettingsPanel({
 
                             {/* Background */}
                             <SettingsSection title="Background">
-                                <div className="space-y-3">
+                                <div className="space-y-4">
                                     <div className="flex items-center gap-3">
-                                        <label className="text-sm text-slate-400 w-20">Color</label>
+                                        <label className="text-sm text-cyan-300 font-medium w-20">Color</label>
                                         <input
                                             type="color"
-                                            value={styles.backgroundColor || "#1e293b"}
+                                            value={styles.backgroundColor || "#1a1b2e"}
                                             onChange={(e) => updateStyles({ backgroundColor: e.target.value })}
-                                            className="w-10 h-10 rounded cursor-pointer bg-transparent border border-slate-600"
+                                            className="w-12 h-12 rounded-xl cursor-pointer bg-transparent border-2 border-cyan-500/30 hover:border-cyan-500/50 transition-colors"
                                         />
                                         <input
                                             type="text"
-                                            value={styles.backgroundColor || "#1e293b"}
+                                            value={styles.backgroundColor || "#1a1b2e"}
                                             onChange={(e) => updateStyles({ backgroundColor: e.target.value })}
-                                            className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 font-mono"
+                                            className="flex-1 px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400"
                                         />
                                     </div>
                                     <SliderInput
@@ -179,7 +181,7 @@ export function BlockSettingsPanel({
 
                             {/* Border */}
                             <SettingsSection title="Border">
-                                <div className="space-y-3">
+                                <div className="space-y-4">
                                     <SliderInput
                                         label="Width"
                                         value={styles.borderWidth ?? 1}
@@ -189,18 +191,18 @@ export function BlockSettingsPanel({
                                         onChange={(value) => updateStyles({ borderWidth: value })}
                                     />
                                     <div className="flex items-center gap-3">
-                                        <label className="text-sm text-slate-400 w-20">Color</label>
+                                        <label className="text-sm text-cyan-300 font-medium w-20">Color</label>
                                         <input
                                             type="color"
-                                            value={styles.borderColor || "#475569"}
+                                            value={styles.borderColor || "#06b6d4"}
                                             onChange={(e) => updateStyles({ borderColor: e.target.value })}
-                                            className="w-10 h-10 rounded cursor-pointer bg-transparent border border-slate-600"
+                                            className="w-12 h-12 rounded-xl cursor-pointer bg-transparent border-2 border-cyan-500/30 hover:border-cyan-500/50 transition-colors"
                                         />
                                         <input
                                             type="text"
-                                            value={styles.borderColor || "#475569"}
+                                            value={styles.borderColor || "#06b6d4"}
                                             onChange={(e) => updateStyles({ borderColor: e.target.value })}
-                                            className="flex-1 px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 font-mono"
+                                            className="flex-1 px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white font-mono focus:outline-none focus:ring-2 focus:ring-cyan-400"
                                         />
                                     </div>
                                     <SliderInput
@@ -222,10 +224,10 @@ export function BlockSettingsPanel({
                                             key={opt.id}
                                             onClick={() => updateStyles({ shadow: opt.id as BlockStyles["shadow"] })}
                                             className={cn(
-                                                "px-3 py-2 text-xs rounded-lg border transition-all",
+                                                "px-3 py-3 text-xs font-medium rounded-xl border transition-all hover:scale-105",
                                                 (styles.shadow || "lg") === opt.id
-                                                    ? "bg-cyan-500/20 border-cyan-500 text-cyan-400"
-                                                    : "bg-slate-800 border-slate-600 text-slate-400 hover:border-slate-500"
+                                                    ? "bg-cyan-500/20 border-cyan-400 text-white shadow-lg shadow-cyan-500/30"
+                                                    : "bg-[#16172b] border-cyan-500/20 text-cyan-300 hover:border-cyan-500/50"
                                             )}
                                         >
                                             {opt.label}
@@ -314,7 +316,7 @@ export function BlockSettingsPanel({
                                     value={block.title || ""}
                                     onChange={(e) => onUpdate({ title: e.target.value })}
                                     placeholder="Enter block title..."
-                                    className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                    className="w-full px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white placeholder-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                                 />
                             </SettingsSection>
 
@@ -327,7 +329,7 @@ export function BlockSettingsPanel({
                                             value={(block.props?.value as string) || ""}
                                             onChange={(e) => updateProps({ value: e.target.value })}
                                             placeholder="e.g., 1,234"
-                                            className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                            className="w-full px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white placeholder-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                                         />
                                     </SettingsSection>
                                     <SettingsSection title="Label">
@@ -336,7 +338,7 @@ export function BlockSettingsPanel({
                                             value={(block.props?.label as string) || ""}
                                             onChange={(e) => updateProps({ label: e.target.value })}
                                             placeholder="e.g., Total Users"
-                                            className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                            className="w-full px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white placeholder-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                                         />
                                     </SettingsSection>
                                     <SettingsSection title="Change Text">
@@ -345,7 +347,7 @@ export function BlockSettingsPanel({
                                             value={(block.props?.change as string) || ""}
                                             onChange={(e) => updateProps({ change: e.target.value })}
                                             placeholder="e.g., +12% this week"
-                                            className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                            className="w-full px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white placeholder-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                                         />
                                     </SettingsSection>
                                 </>
@@ -357,8 +359,8 @@ export function BlockSettingsPanel({
                                         value={(block.props?.content as string) || ""}
                                         onChange={(e) => updateProps({ content: e.target.value })}
                                         placeholder="Enter text content..."
-                                        rows={6}
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"
+                                        rows={8}
+                                        className="w-full px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white placeholder-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all resize-none"
                                     />
                                 </SettingsSection>
                             )}
@@ -370,7 +372,7 @@ export function BlockSettingsPanel({
                                         value={(block.props?.url as string) || ""}
                                         onChange={(e) => updateProps({ url: e.target.value })}
                                         placeholder="https://example.com"
-                                        className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                        className="w-full px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white placeholder-cyan-300/50 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
                                     />
                                 </SettingsSection>
                             )}
@@ -384,13 +386,13 @@ export function BlockSettingsPanel({
                                 <button
                                     onClick={() => onUpdate({ isLocked: !block.isLocked })}
                                     className={cn(
-                                        "w-full flex items-center justify-between px-4 py-3 rounded-lg border transition-all",
+                                        "w-full flex items-center justify-between px-5 py-4 rounded-xl border-2 transition-all hover:scale-[1.02]",
                                         block.isLocked
-                                            ? "bg-amber-500/20 border-amber-500/50 text-amber-400"
-                                            : "bg-slate-800 border-slate-600 text-slate-300 hover:border-slate-500"
+                                            ? "bg-amber-500/20 border-amber-500/50 text-amber-400 shadow-lg shadow-amber-500/20"
+                                            : "bg-[#16172b] border-cyan-500/30 text-cyan-300 hover:border-cyan-500/50"
                                     )}
                                 >
-                                    <span className="flex items-center gap-3">
+                                    <span className="flex items-center gap-3 font-medium">
                                         {block.isLocked ? (
                                             <Lock className="w-5 h-5" />
                                         ) : (
@@ -398,17 +400,17 @@ export function BlockSettingsPanel({
                                         )}
                                         <span>{block.isLocked ? "Block is Locked" : "Block is Unlocked"}</span>
                                     </span>
-                                    <span className="text-xs px-2 py-1 rounded bg-slate-700">
+                                    <span className="text-xs px-3 py-1.5 rounded-lg bg-black/30 font-medium">
                                         {block.isLocked ? "Click to Unlock" : "Click to Lock"}
                                     </span>
                                 </button>
-                                <p className="text-xs text-slate-500 mt-2">
+                                <p className="text-xs text-cyan-300/70 mt-3">
                                     Locked blocks cannot be moved or resized.
                                 </p>
                             </SettingsSection>
 
                             <SettingsSection title="Visibility">
-                                <div className="space-y-2">
+                                <div className="space-y-3">
                                     {["viewer", "analyst", "admin"].map((role) => {
                                         const visibleTo = block.visibleTo || ["viewer", "analyst", "admin"];
                                         const isVisible = visibleTo.includes(role);
@@ -422,17 +424,17 @@ export function BlockSettingsPanel({
                                                     onUpdate({ visibleTo: newVisibleTo.length > 0 ? newVisibleTo : undefined });
                                                 }}
                                                 className={cn(
-                                                    "w-full flex items-center justify-between px-4 py-2 rounded-lg border transition-all",
+                                                    "w-full flex items-center justify-between px-5 py-3 rounded-xl border transition-all hover:scale-[1.02]",
                                                     isVisible
                                                         ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
-                                                        : "bg-slate-800 border-slate-600 text-slate-500"
+                                                        : "bg-[#16172b] border-cyan-500/20 text-cyan-300/50"
                                                 )}
                                             >
-                                                <span className="flex items-center gap-2 capitalize">
+                                                <span className="flex items-center gap-2 capitalize font-medium">
                                                     {isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                                                     {role}
                                                 </span>
-                                                <span className="text-xs">{isVisible ? "Visible" : "Hidden"}</span>
+                                                <span className="text-xs font-medium">{isVisible ? "Visible" : "Hidden"}</span>
                                             </button>
                                         );
                                     })}
@@ -457,7 +459,10 @@ function SettingsSection({
 }) {
     return (
         <div>
-            <h3 className="text-sm font-medium text-slate-300 mb-3">{title}</h3>
+            <h3 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                <span className="w-1 h-4 bg-cyan-400 rounded-full"></span>
+                {title}
+            </h3>
             {children}
         </div>
     );
@@ -483,8 +488,8 @@ function SliderInput({
     return (
         <div className="space-y-2">
             <div className="flex items-center justify-between">
-                <label className="text-sm text-slate-400">{label}</label>
-                <span className="text-sm text-slate-200 font-mono">
+                <label className="text-sm text-cyan-300 font-medium">{label}</label>
+                <span className="text-sm text-white font-mono bg-cyan-500/10 px-3 py-1 rounded-lg">
                     {value}{unit}
                 </span>
             </div>
@@ -495,7 +500,7 @@ function SliderInput({
                 step={step}
                 value={value}
                 onChange={(e) => onChange(parseFloat(e.target.value))}
-                className="w-full accent-cyan-500"
+                className="w-full h-2 accent-cyan-500 rounded-full"
             />
         </div>
     );
@@ -511,15 +516,15 @@ function NumberInput({
     onChange: (value: number) => void;
 }) {
     return (
-        <div className="space-y-1">
-            <label className="text-xs text-slate-400">{label}</label>
+        <div className="space-y-2">
+            <label className="text-xs text-cyan-300 font-medium">{label}</label>
             <input
                 type="number"
                 min={0}
                 max={100}
                 value={value}
                 onChange={(e) => onChange(parseInt(e.target.value) || 0)}
-                className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                className="w-full px-4 py-3 bg-[#16172b] border border-cyan-500/30 rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all"
             />
         </div>
     );
