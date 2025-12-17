@@ -29,6 +29,7 @@ interface PreferencesState extends UserPreferences {
   updateBlock: (blockId: string, updates: Partial<CanvasBlock>) => void;
   removeBlock: (blockId: string) => void;
   moveBlock: (blockId: string, position: Position) => void;
+  duplicateBlock: (blockId: string) => void;
   toggleBlockMinimized: (blockId: string) => void;
   toggleBlockLocked: (blockId: string) => void;
 
@@ -234,9 +235,26 @@ export const usePreferencesStore = create<PreferencesState>()(
             (w) => w.id === state.activeWorkspaceId
           );
           if (workspace) {
-            const block = workspace.canvasLayout.blocks.find((b) => b.id === blockId);
-            if (block) {
-              Object.assign(block, updates);
+            const blockIndex = workspace.canvasLayout.blocks.findIndex((b) => b.id === blockId);
+            if (blockIndex !== -1) {
+              const block = workspace.canvasLayout.blocks[blockIndex];
+              // Deep merge for nested objects (styles, props)
+              workspace.canvasLayout.blocks[blockIndex] = {
+                ...block,
+                ...updates,
+                // Deep merge styles if provided
+                styles: updates.styles
+                  ? { ...block.styles, ...updates.styles }
+                  : block.styles,
+                // Deep merge props if provided
+                props: updates.props
+                  ? { ...block.props, ...updates.props }
+                  : block.props,
+                // Deep merge position if provided
+                position: updates.position
+                  ? { ...block.position, ...updates.position }
+                  : block.position,
+              };
               workspace.updatedAt = new Date().toISOString();
             }
           }
@@ -264,6 +282,30 @@ export const usePreferencesStore = create<PreferencesState>()(
             const block = workspace.canvasLayout.blocks.find((b) => b.id === blockId);
             if (block && !block.isLocked) {
               block.position = position;
+              workspace.updatedAt = new Date().toISOString();
+            }
+          }
+        }),
+
+      duplicateBlock: (blockId) =>
+        set((state) => {
+          const workspace = state.workspaces.find(
+            (w) => w.id === state.activeWorkspaceId
+          );
+          if (workspace) {
+            const originalBlock = workspace.canvasLayout.blocks.find((b) => b.id === blockId);
+            if (originalBlock) {
+              const newBlock = {
+                ...JSON.parse(JSON.stringify(originalBlock)),
+                id: crypto.randomUUID(),
+                title: originalBlock.title ? `${originalBlock.title} (Copy)` : undefined,
+                position: {
+                  ...originalBlock.position,
+                  y: originalBlock.position.y + originalBlock.position.h,
+                },
+                isLocked: false,
+              };
+              workspace.canvasLayout.blocks.push(newBlock);
               workspace.updatedAt = new Date().toISOString();
             }
           }

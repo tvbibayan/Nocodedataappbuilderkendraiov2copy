@@ -22,10 +22,10 @@ export function FlowCanvas({ nodes, connections, selectedNode, onNodeClick }: Fl
     const startY = fromNode.y + 50;
     const endX = toNode.x;
     const endY = toNode.y + 50;
-    
+
     const controlPoint1X = startX + (endX - startX) / 3;
     const controlPoint2X = startX + (2 * (endX - startX)) / 3;
-    
+
     return `M ${startX} ${startY} C ${controlPoint1X} ${startY}, ${controlPoint2X} ${endY}, ${endX} ${endY}`;
   };
 
@@ -50,10 +50,10 @@ export function FlowCanvas({ nodes, connections, selectedNode, onNodeClick }: Fl
               <stop offset="100%" style={{ stopColor: '#22d3ee', stopOpacity: 0.8 }} />
             </linearGradient>
             <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
               <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
           </defs>
@@ -61,7 +61,7 @@ export function FlowCanvas({ nodes, connections, selectedNode, onNodeClick }: Fl
             const fromNode = nodes.find(n => n.id === conn.from);
             const toNode = nodes.find(n => n.id === conn.to);
             if (!fromNode || !toNode) return null;
-            
+
             return (
               <path
                 key={idx}
@@ -79,15 +79,14 @@ export function FlowCanvas({ nodes, connections, selectedNode, onNodeClick }: Fl
         {nodes.map((node) => {
           const Icon = iconMap[node.icon as keyof typeof iconMap];
           const isSelected = selectedNode?.id === node.id;
-          
+
           return (
             <div
               key={node.id}
-              className={`absolute cursor-pointer transition-all ${
-                isSelected 
-                  ? 'ring-2 ring-cyan-500 shadow-2xl shadow-cyan-500/50' 
+              className={`absolute cursor-pointer transition-all ${isSelected
+                  ? 'ring-2 ring-cyan-500 shadow-2xl shadow-cyan-500/50'
                   : 'hover:shadow-xl hover:shadow-cyan-500/30'
-              }`}
+                }`}
               style={{
                 left: `${node.x}px`,
                 top: `${node.y}px`,
@@ -95,27 +94,27 @@ export function FlowCanvas({ nodes, connections, selectedNode, onNodeClick }: Fl
               }}
               onClick={() => onNodeClick(node)}
             >
-              <div className="bg-slate-900 border-2 border-cyan-500/50 rounded-xl p-4 backdrop-blur">
+              <div className="bg-slate-700 border-2 border-cyan-400 rounded-xl p-4 backdrop-blur shadow-lg shadow-cyan-500/20">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center">
-                      {Icon && <Icon className="w-5 h-5 text-cyan-400" />}
+                    <div className="w-10 h-10 bg-cyan-500/30 rounded-lg flex items-center justify-center">
+                      {Icon && <Icon className="w-5 h-5 text-cyan-300" />}
                     </div>
                     <div>
-                      <div className="text-sm text-slate-200">{node.title}</div>
-                      <div className="text-xs text-slate-500 capitalize">{node.type}</div>
+                      <div className="text-sm text-white font-medium">{node.title}</div>
+                      <div className="text-xs text-slate-300 capitalize">{node.type}</div>
                     </div>
                   </div>
                   <CheckCircle className="w-4 h-4 text-emerald-400" />
                 </div>
-                
+
                 {/* Connection Points */}
                 <div className="flex justify-between mt-2">
                   {node.id !== '1' && (
-                    <div className="w-3 h-3 bg-cyan-500 rounded-full -ml-6 mt-2 shadow-lg shadow-cyan-500/50"></div>
+                    <div className="w-3 h-3 bg-cyan-400 rounded-full -ml-6 mt-2 shadow-lg shadow-cyan-400/70 border border-white/30"></div>
                   )}
                   {node.id !== '4' && (
-                    <div className="w-3 h-3 bg-cyan-500 rounded-full -mr-6 mt-2 ml-auto shadow-lg shadow-cyan-500/50"></div>
+                    <div className="w-3 h-3 bg-cyan-400 rounded-full -mr-6 mt-2 ml-auto shadow-lg shadow-cyan-400/70 border border-white/30"></div>
                   )}
                 </div>
               </div>

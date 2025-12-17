@@ -16,6 +16,24 @@ export interface Position {
 
 export type BlockType = "stat" | "component" | "text" | "embed" | "container";
 
+/** Custom styling options for blocks */
+export interface BlockStyles {
+  /** Background color (hex or CSS color) */
+  backgroundColor?: string;
+  /** Background opacity (0-100) */
+  backgroundOpacity?: number;
+  /** Border width in pixels */
+  borderWidth?: number;
+  /** Border color (hex or CSS color) */
+  borderColor?: string;
+  /** Border radius in pixels */
+  borderRadius?: number;
+  /** Shadow depth */
+  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  /** Padding in pixels */
+  padding?: { top: number; right: number; bottom: number; left: number };
+}
+
 export interface CanvasBlock {
   id: string;
   type: BlockType;
@@ -34,6 +52,8 @@ export interface CanvasBlock {
   visibleTo?: string[];
   /** Optional custom title for the block */
   title?: string;
+  /** Custom styling options */
+  styles?: BlockStyles;
 }
 
 export interface CanvasLayout {

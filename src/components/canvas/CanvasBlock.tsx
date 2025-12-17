@@ -1,15 +1,16 @@
 /**
  * Canvas Block Component
- * Individual draggable/resizable block with toolbar
+ * Individual draggable/resizable block with toolbar and settings panel
  */
 
 import * as React from "react";
-import { GripVertical, Minimize2, Lock, Unlock, Trash2, Maximize2 } from "lucide-react";
+import { GripVertical, Minimize2, Lock, Unlock, Trash2, Maximize2, Settings, Copy } from "lucide-react";
 import { usePreferencesStore } from "../../stores/preferences-store";
 import type { CanvasBlock } from "../../config/canvas-layout";
 import { cn } from "../ui/utils";
 import { TextBlock } from "./TextBlock";
 import { EmbedBlock } from "./EmbedBlock";
+import { BlockSettingsPanel } from "./BlockSettingsPanel";
 
 interface CanvasBlockComponentProps {
   block: CanvasBlock;
@@ -26,11 +27,13 @@ export function CanvasBlockComponent({
 }: CanvasBlockComponentProps) {
   const [isHovered, setIsHovered] = React.useState(false);
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
 
   const toggleBlockMinimized = usePreferencesStore((s) => s.toggleBlockMinimized);
   const toggleBlockLocked = usePreferencesStore((s) => s.toggleBlockLocked);
   const removeBlock = usePreferencesStore((s) => s.removeBlock);
   const updateBlock = usePreferencesStore((s) => s.updateBlock);
+  const duplicateBlock = usePreferencesStore((s) => s.duplicateBlock);
 
   // Render block content based on type
   const renderContent = () => {
@@ -106,69 +109,120 @@ export function CanvasBlockComponent({
     blue: "border-l-blue-500",
   };
 
+  // Shadow classes mapping
+  const shadowClasses: Record<string, string> = {
+    none: "",
+    sm: "shadow-sm",
+    md: "shadow-md",
+    lg: "shadow-lg",
+    xl: "shadow-xl",
+  };
+
+  // Compute custom styles from block.styles
+  const styles = block.styles || {};
+  const customStyle: React.CSSProperties = {
+    ...(styles.backgroundColor && {
+      backgroundColor: styles.backgroundColor,
+      opacity: styles.backgroundOpacity !== undefined ? styles.backgroundOpacity / 100 : undefined,
+    }),
+    ...(styles.borderWidth !== undefined && { borderWidth: `${styles.borderWidth}px` }),
+    ...(styles.borderColor && { borderColor: styles.borderColor }),
+    ...(styles.borderRadius !== undefined && { borderRadius: `${styles.borderRadius}px` }),
+    ...(styles.padding && {
+      padding: `${styles.padding.top}px ${styles.padding.right}px ${styles.padding.bottom}px ${styles.padding.left}px`,
+    }),
+  };
+
+  const shadowClass = shadowClasses[styles.shadow || "lg"] || "shadow-lg";
+
   return (
     <>
       <div
         className={cn(
-          "canvas-block h-full rounded-xl border-l-4 border border-slate-700 bg-slate-900",
+          "canvas-block h-full rounded-xl border-l-4 border border-slate-600 bg-slate-800 relative overflow-hidden",
+          shadowClass,
           accentClasses[accentColor] || "border-l-cyan-500",
           block.isLocked && "opacity-80",
           isExpanded && "fixed inset-4 z-50"
         )}
+        style={customStyle}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}
       >
-        {/* Block toolbar */}
+        {/* Block toolbar - inside the block at top */}
         {editable && isHovered && (
-          <div className="absolute -top-8 left-2 right-2 flex items-center gap-1 px-2 py-1 bg-slate-800 rounded-t-lg border border-slate-700 border-b-0 z-20">
+          <div
+            className="absolute top-0 left-0 right-0 flex items-center gap-1 px-3 py-2 bg-slate-900 border-b border-slate-700 z-[1000]"
+            style={{ pointerEvents: 'auto' }}
+          >
             {/* Drag handle */}
-            <div className="block-drag-handle cursor-grab active:cursor-grabbing p-1 hover:bg-slate-700 rounded">
+            <div className="block-drag-handle cursor-grab active:cursor-grabbing p-1.5 hover:bg-slate-700 rounded">
               <GripVertical className="w-4 h-4 text-slate-400" />
             </div>
 
             {/* Block title */}
-            <span className="flex-1 text-xs text-slate-400 truncate px-2">
+            <span className="flex-1 text-sm text-slate-300 font-medium truncate px-2">
               {block.title || block.componentType || block.type}
             </span>
 
-            {/* Toolbar buttons */}
+            {/* Toolbar buttons - larger and more visible */}
             <button
-              onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
-              className="p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded"
-              title={isExpanded ? "Collapse" : "Expand"}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsSettingsOpen(true); }}
+              className="p-1.5 text-cyan-400 hover:text-cyan-300 hover:bg-slate-700 rounded transition-colors"
+              title="Block Settings"
+              type="button"
             >
-              <Maximize2 className="w-3.5 h-3.5" />
+              <Settings className="w-4 h-4" />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); toggleBlockLocked(block.id); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); duplicateBlock(block.id); }}
+              className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded transition-colors"
+              title="Duplicate"
+              type="button"
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsExpanded(!isExpanded); }}
+              className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded transition-colors"
+              title={isExpanded ? "Collapse" : "Expand"}
+              type="button"
+            >
+              <Maximize2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleBlockLocked(block.id); }}
               className={cn(
-                "p-1 hover:bg-slate-700 rounded",
-                block.isLocked ? "text-amber-400" : "text-slate-400 hover:text-slate-200"
+                "p-1.5 hover:bg-slate-700 rounded transition-colors",
+                block.isLocked ? "text-amber-400 hover:text-amber-300" : "text-slate-400 hover:text-slate-200"
               )}
               title={block.isLocked ? "Unlock" : "Lock position"}
+              type="button"
             >
-              {block.isLocked ? <Lock className="w-3.5 h-3.5" /> : <Unlock className="w-3.5 h-3.5" />}
+              {block.isLocked ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); toggleBlockMinimized(block.id); }}
-              className="p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleBlockMinimized(block.id); }}
+              className="p-1.5 text-slate-400 hover:text-slate-200 hover:bg-slate-700 rounded transition-colors"
               title="Minimize"
+              type="button"
             >
-              <Minimize2 className="w-3.5 h-3.5" />
+              <Minimize2 className="w-4 h-4" />
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); removeBlock(block.id); }}
-              className="p-1 text-slate-400 hover:text-red-400 hover:bg-slate-700 rounded"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); removeBlock(block.id); }}
+              className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-slate-700 rounded transition-colors"
               title="Delete"
+              type="button"
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              <Trash2 className="w-4 h-4" />
             </button>
           </div>
         )}
 
         {/* Block content */}
-        <div className="h-full overflow-auto rounded-xl">{renderContent()}</div>
+        <div className={cn("h-full overflow-auto", isHovered && editable && "pt-10")}>{renderContent()}</div>
 
         {/* Locked indicator */}
         {block.isLocked && !isHovered && (
@@ -185,6 +239,14 @@ export function CanvasBlockComponent({
           onClick={() => setIsExpanded(false)}
         />
       )}
+
+      {/* Settings Panel */}
+      <BlockSettingsPanel
+        isOpen={isSettingsOpen}
+        block={block}
+        onClose={() => setIsSettingsOpen(false)}
+        onUpdate={(updates) => updateBlock(block.id, updates)}
+      />
     </>
   );
 }
